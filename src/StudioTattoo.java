@@ -17,10 +17,10 @@ public class StudioTattoo {
         do {
             for(int i = 0; i < 3; i++) System.out.println();
 
-            System.out.println("##################################################");
-            System.out.println("#                INK MASTER STUDIO               #");
-            System.out.println("#           SISTEMA DE GESTÃO DE AGENDA          #");
-            System.out.println("##################################################");
+            System.out.println("#################################################");
+            System.out.println("#                INK MASTER STUDIO              #");
+            System.out.println("#           SISTEMA DE GESTÃO DE AGENDA         #");
+            System.out.println("#################################################");
             System.out.printf("* TOTAL AGENDADO: %-17d *\n", agenda.size());
             System.out.println("*===============================================*");
             System.out.println("* MENU PRINCIPAL:                               *");
@@ -28,7 +28,7 @@ public class StudioTattoo {
             System.out.println("* [1]  (+) NOVO AGENDAMENTO                     *");
             System.out.println("* [2]  (=) IMPRIMIR COMPROVANTE (Por ID)        *");
             System.out.println("* [3]  (?) CONSULTAR AGENDA GERAL               *");
-            System.out.println("* [4]  (*) EDITAR AGENDAMENTO (Data/Valor/Arte) *");
+            System.out.println("* [4]  (*) EDITAR AGENDAMENTO                   *");
             System.out.println("* [5]  (X) SAIR DO SISTEMA                      *");
             System.out.println("*===============================================*");
             System.out.print("  *>>> Digite o número da opção: ");
@@ -61,14 +61,83 @@ public class StudioTattoo {
         System.out.print("Nome do Cliente: ");
         String cliente = input.nextLine();
 
-        System.out.print("WhatsApp de contato: ");
-        String whats = input.nextLine();
 
-        System.out.print("Idade do Cliente: ");
-        String idade = input.nextLine();
 
-        System.out.print("Data da Sessão (ex: 25/12/2025): ");
-        String data = input.nextLine();
+        System.out.print("WhatsApp de contato (apenas números): ");
+        String whats;
+
+        while(true) {
+            String entrada = input.nextLine();
+
+            // Validação: Verifica se contém APENAS números de 0 a 9 e não está vazio
+                if (entrada.matches("[0-9]+") && !entrada.isEmpty()){
+                    whats = entrada;
+                    break;
+                } else {
+                    System.out.println("⚠️ Valor inválido! Por favor, digite apenas números.");
+                    System.out.print("Tente novamente: ");
+                }
+        }
+
+
+
+        System.out.print("Idade do Cliente (Máx 45): ");
+        String idade = "";
+
+        while (true) {
+            if(input.hasNextInt()) {
+                int valorIdade = input.nextInt();
+                input.nextLine(); // Limpa o buffer
+
+                // --- NOVA VALIDAÇÃO AQUI ---
+                // Verifica se é maior que 0 E menor ou igual a 45
+                if (valorIdade > 17 && valorIdade <= 45) {
+                    idade = String.valueOf(valorIdade);
+                    break; // SÓ AQUI o loop quebra
+                } else {
+                    System.out.println("⚠️ A idade permitida é até 45 anos!");
+                    System.out.print("Idade do Cliente: ");
+                }
+
+            } else {
+                input.nextLine();
+                System.out.println("⚠️ Idade inválida! Digite apenas números.");
+                System.out.print("Idade do Cliente: ");
+            }
+        }
+
+
+
+
+
+        String data = "";
+        while(true) {
+            System.out.print("Data da Sessão (ex: 25/12/2026): ");
+            String dataInput = input.nextLine();
+
+            if(dataInput.matches("\\d{2}/\\d{2}/\\d{4}")){
+                data = dataInput;
+                break;
+            } else {
+                System.out.println("Formato Inválido! Use o formato (ex: 25/12/2026)");
+            }
+
+        }
+
+
+        String hora = "";
+        while(true) {
+            System.out.print("Hora da Sessão (ex: 14:00): ");
+            String entrada = input.nextLine();
+
+            if(entrada.matches("\\d{2}:\\d{2}")){
+                hora = entrada;
+                break;
+            } else {
+                System.out.println("Formato Inválido! Use o formato 00:00");
+            }
+        }
+
 
         System.out.print("Local do corpo (ex: Braço, Costas): ");
         String local = input.nextLine();
@@ -76,26 +145,48 @@ public class StudioTattoo {
         System.out.print("Descrição da Arte: ");
         String desc = input.nextLine();
 
-        System.out.print("Quantos Centímetros? : ");
-        String centimetros;
 
-       if(input.hasNextDouble()) {
-           double valor = input.nextDouble();
-           centimetros = String.valueOf(valor); // Converte para String para salvar no objeto
-           input.nextLine();
-        } else {
-           input.nextLine(); // Limpa o texto errado que o usuário digitou
-           System.out.println("⚠️ Valor inválido! Digite um número");
-           centimetros = "0";
+        System.out.print("Quantos Centímetros? : ");
+        double centimetros;
+
+        while(true) {
+            if(input.hasNextInt()){
+                centimetros = input.nextDouble();
+                input.nextLine();
+                break;
+            } else {
+                input.nextLine();
+                System.out.println("⚠️ Valor inválido! Digite um número (ex: 10,5 ou 15)");
+            }
         }
 
+
         // Criando o objeto
-        Agendamento novaTattoo = new Agendamento(cliente, whats, idade, data, local, desc, centimetros);
+        Agendamento novaTattoo = new Agendamento(cliente, whats, idade, data , hora, local, desc, centimetros);
         agenda.add(novaTattoo);
 
-        System.out.println("\nAgendamento realizado com Sucesso! 🤘");
-        System.out.println(">>> CÓDIGO DO AGENDAMENTO (ID): " + (agenda.size() - 1));
-        System.out.println("Pressione ENTER para continuar...");
+        System.out.print("Agendando");
+
+        // O Thread.sleep exige esse bloco try/catch para funcionar
+        try {
+            for (int i = 0; i < 3; i++) {
+                System.out.print(".");
+                Thread.sleep(500); // Espera meio segundo
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Erro no timer");
+        }
+
+        System.out.println("\n\nAgendamento realizado com Sucesso! 🤘");
+
+        // --- AQUI ESTÁ A MÁGICA ---
+        // Pegamos o ID do item que acabamos de adicionar (é o último da lista)
+        int idNovo = agenda.size() - 1;
+
+        // Chamamos o método que já existe lá dentro do objeto
+        novaTattoo.exibirComprovante(idNovo);
+
+        System.out.println("Pressione ENTER para voltar ao menu...");
         input.nextLine();
     }
 
@@ -159,8 +250,7 @@ public class StudioTattoo {
 
             System.out.println("--- EDITANDO: " + a.getCliente() + " ---");
             System.out.println("[1] Mudar Data");
-            System.out.println("[2] Mudar Descrição da Arte");
-//            System.out.println("[3] Ajustar Valor");
+            System.out.println("[2] Mudar Horário");
             System.out.print("Escolha uma opção: ");
 
             int tipoEdicao = input.nextInt();
@@ -173,11 +263,12 @@ public class StudioTattoo {
                     String novaData = input.nextLine();
                     a.setDataSessao(novaData); // Usando o Setter que criamos
                 }
+
                 case 2 -> {
-                    System.out.println("Arte Atual: " + a.getDescricaoArte());
-                    System.out.print("Nova Descrição: ");
-                    String novaDesc = input.nextLine();
-                    a.setDescricaoArte(novaDesc);
+                    System.out.println("Hora Atual: " + a.getHora());
+                    System.out.print("Novo Horário: ");
+                    String novaHora = input.nextLine();
+                    a.setHora(novaHora);
                 }
                 default -> System.out.println("Opção inválida.");
             }

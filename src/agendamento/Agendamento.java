@@ -1,48 +1,46 @@
 package agendamento;
 
 public class Agendamento {
+    // Atributos
     private String cliente;
+    private String whatsapp; // Mudei a ordem aqui pra ficar organizado
     private String idade;
-    private String whatsapp;
     private String dataSessao;
+    private String hora;
     private String localCorpo;
     private String descricaoArte;
-    private String centimetros;
+    private double centimetros;
 
-    // Construtor ÚNICO e COMPLETO
-    public Agendamento (String cliente, String whatsapp, String idade, String dataSessao, String localCorpo, String descricaoArte, String centimetros) {
+    // CONSTRUTOR (A ordem aqui é fundamental!)
+    public Agendamento(String cliente, String whatsapp, String idade, String dataSessao, String hora, String localCorpo, String descricaoArte, double centimetros) {
         this.cliente = cliente;
         this.whatsapp = whatsapp;
         this.idade = idade;
         this.dataSessao = dataSessao;
+        this.hora = hora;  // Garantindo que a hora seja salva!
         this.localCorpo = localCorpo;
         this.descricaoArte = descricaoArte;
         this.centimetros = centimetros;
     }
 
-//    public Agendamento(String cliente, String whats, String idade, String data, String local, String centimetros) {
-//    }
-
-    // Getters
+    // Getters e Setters (Mantidos iguais)
     public String getCliente() { return cliente; }
-    public String getWhatsapp() { return whatsapp; }
-    public String getIdade() { return idade; }
     public String getDataSessao() { return dataSessao; }
+    public String getHora() { return hora; }
     public String getDescricaoArte() { return descricaoArte; }
-    public String getCentimetros() { return centimetros; }
-    public String getLocalCorpo() { return localCorpo; } // Faltava esse getter no seu código original
+    public double getCentimetros() { return centimetros; }
 
-    // Setters
-    public void setDescricaoArte(String descricaoArte) { this.descricaoArte = descricaoArte; }
-    public void setDataSessao(String dataSessao) {this.dataSessao = dataSessao; }
-    public void setCentimetros(String centimetros) {this.centimetros = centimetros; }
+    public void setDataSessao(String dataSessao) { this.dataSessao = dataSessao; }
+    public void setHora(String hora) { this.hora = hora; }
 
-    // Exibir
+
+    // Método de Exibição
     public void exibirComprovante(int id) {
         System.out.println("\n-------------------------------------------");
         System.out.printf("ID: %d | CLIENTE: %s\n", id, this.cliente);
         System.out.println("IDADE: " + this.idade + " Anos");
         System.out.println("DATA: " + this.dataSessao);
+        System.out.println("HORAS: " + this.hora); // Agora vai aparecer!
         System.out.println("ARTE: " + this.descricaoArte);
         System.out.println("LOCAL: " + this.localCorpo);
         System.out.println("CENTÍMETROS: " + this.centimetros);
