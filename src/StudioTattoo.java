@@ -55,6 +55,16 @@ public class StudioTattoo {
         input.close();
     }
 
+
+
+
+
+
+
+
+
+
+
     public void novoAgendamento() {
         System.out.println("\n--- NOVO AGENDAMENTO ---");
 
@@ -62,30 +72,28 @@ public class StudioTattoo {
         String cliente = input.nextLine();
 
 
-
         System.out.print("WhatsApp de contato (apenas números): ");
         String whats;
 
-        while(true) {
+        while (true) {
             String entrada = input.nextLine();
 
             // Validação: Verifica se contém APENAS números de 0 a 9 e não está vazio
-                if (entrada.matches("[0-9]+") && !entrada.isEmpty()){
-                    whats = entrada;
-                    break;
-                } else {
-                    System.out.println("⚠️ Valor inválido! Por favor, digite apenas números.");
-                    System.out.print("Tente novamente: ");
-                }
+            if (entrada.matches("[0-9]+") && !entrada.isEmpty()) {
+                whats = entrada;
+                break;
+            } else {
+                System.out.println("⚠️ Valor inválido! Por favor, digite apenas números.");
+                System.out.print("Tente novamente: ");
+            }
         }
-
 
 
         System.out.print("Idade do Cliente (Máx 45): ");
         String idade = "";
 
         while (true) {
-            if(input.hasNextInt()) {
+            if (input.hasNextInt()) {
                 int valorIdade = input.nextInt();
                 input.nextLine(); // Limpa o buffer
 
@@ -107,15 +115,12 @@ public class StudioTattoo {
         }
 
 
-
-
-
         String data = "";
-        while(true) {
+        while (true) {
             System.out.print("Data da Sessão (ex: 25/12/2026): ");
             String dataInput = input.nextLine();
 
-            if(dataInput.matches("\\d{2}/\\d{2}/\\d{4}")){
+            if (dataInput.matches("\\d{2}/\\d{2}/\\d{4}")) {
                 data = dataInput;
                 break;
             } else {
@@ -126,11 +131,11 @@ public class StudioTattoo {
 
 
         String hora = "";
-        while(true) {
+        while (true) {
             System.out.print("Hora da Sessão (ex: 14:00): ");
             String entrada = input.nextLine();
 
-            if(entrada.matches("\\d{2}:\\d{2}")){
+            if (entrada.matches("\\d{2}:\\d{2}")) {
                 hora = entrada;
                 break;
             } else {
@@ -138,40 +143,96 @@ public class StudioTattoo {
             }
         }
 
-
         System.out.print("Local do corpo (ex: Braço, Costas): ");
         String local = input.nextLine();
 
-        System.out.print("Descrição da Arte: ");
-        String desc = input.nextLine();
+        String desc = "";
+        double centimetros = 0;
+
+        System.out.println("\n--------------------------------");
+        System.out.println("TIPO DE TRABALHO:");
+        System.out.println("[1] Arte Personalizada (Cliente descreve)");
+        System.out.println("[2] Flash Tattoo (Catálogo do estúdio)");
+        System.out.print("Escolha: ");
 
 
-        System.out.print("Quantos Centímetros? : ");
-        double centimetros;
+        int tipoTrabalho = 0;
+        if (input.hasNextInt()) {
+            tipoTrabalho = input.nextInt();
+            input.nextLine();
+        } else {
+            input.nextLine();
+        }
 
-        while(true) {
-            if(input.hasNextInt()){
-                centimetros = input.nextDouble();
-                input.nextLine();
-                break;
-            } else {
-                input.nextLine();
-                System.out.println("⚠️ Valor inválido! Digite um número (ex: 10,5 ou 15)");
+        if (tipoTrabalho == 2) {
+            // --- MENU DE FLASH TATTOO ---
+            System.out.println("\n>>> CATÁLOGO FLASH <<<");
+            System.out.println("[1] Adaga Old School (12cm)");
+            System.out.println("[2] Borboleta Minimalista (5cm)");
+            System.out.println("[3] Crânio com Rosa (15cm)");
+            System.out.println("[4] Frase: Carpe Diem (8cm)");
+            System.out.print("Escolha o Flash: ");
+
+            int escolhaFlash = input.nextInt();
+            input.nextLine();
+
+            switch (escolhaFlash) {
+                case 1 -> {
+                    desc = "(FLASH) Adaga Old School";
+                    centimetros = 12.0;
+                }
+                case 2 -> {
+                    desc = "(FLASH) Borboleta Minimalista";
+                    centimetros = 5.0;
+                }
+                case 3 -> {
+                    desc = "(FLASH) Crânio com Rosa";
+                    centimetros = 15.0;
+                }
+                case 4 -> {
+                    desc = "(FLASH) Escrita: Carpe Diem";
+                    centimetros = 8.0;
+                }
+                default -> {
+                    System.out.println("Opção inválida! Será registrado como 'Flash Genérico'.");
+                    desc = "(FLASH) Genérico - Verificar na hora";
+                    centimetros = 5.0;
+                }
+            }
+            System.out.println(">>> Flash selecionado: " + desc);
+
+        } else {
+            // --- FLUXO NORMAL (PERSONALIZADO) ---
+            System.out.print("Descrição da Arte: ");
+            desc = input.nextLine();
+
+            System.out.print("Quantos Centímetros? : ");
+            while (true) {
+                if (input.hasNextDouble() || input.hasNextInt()) { // Aceita int ou double
+                    centimetros = input.nextDouble();
+                    input.nextLine();
+                    break;
+                } else {
+                    input.nextLine();
+                    System.out.println("⚠️ Valor inválido! Digite um número (ex: 10,5 ou 15)");
+                }
             }
         }
 
 
-        // Criando o objeto
+
+
+
+
+        // --- 4. CRIAÇÃO DO OBJETO (Igual ao anterior) ---
         Agendamento novaTattoo = new Agendamento(cliente, whats, idade, data , hora, local, desc, centimetros);
         agenda.add(novaTattoo);
 
         System.out.print("Agendando");
-
-        // O Thread.sleep exige esse bloco try/catch para funcionar
         try {
             for (int i = 0; i < 3; i++) {
                 System.out.print(".");
-                Thread.sleep(500); // Espera meio segundo
+                Thread.sleep(500);
             }
         } catch (InterruptedException e) {
             System.out.println("Erro no timer");
@@ -179,16 +240,21 @@ public class StudioTattoo {
 
         System.out.println("\n\nAgendamento realizado com Sucesso! 🤘");
 
-        // --- AQUI ESTÁ A MÁGICA ---
-        // Pegamos o ID do item que acabamos de adicionar (é o último da lista)
         int idNovo = agenda.size() - 1;
-
-        // Chamamos o método que já existe lá dentro do objeto
         novaTattoo.exibirComprovante(idNovo);
 
         System.out.println("Pressione ENTER para voltar ao menu...");
         input.nextLine();
     }
+
+
+
+
+
+
+
+
+
 
     public void imprimirComprovante() {
         if (agenda.isEmpty()) {
